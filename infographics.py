@@ -2,27 +2,32 @@ import financial_data
 from matplotlib import pyplot as plt
 import numpy as np
 from prettytable import PrettyTable
+import PIL
 
-
-plt.style.use('grayscale')
-
-def financial_plot(ts):
+#plt.style.use('grayscale')
+plt.tight_layout()
+def financial_plot(ts, as_pillow=True, w=450, h=350):
 
     fig, (ax1, ax2, ax3) = plt.subplots(3, sharex=True)
     dpi = 100
-    figsize = (450, 350)
+    figsize = (w, h)
     fig.set_size_inches(figsize[0]/dpi, figsize[1]/dpi)
-
+    fig.set_dpi(dpi)
     for ax, tseries, title in zip([ax1, ax2, ax3], ['total_ts', 'crypto_ts', 'stock_ts'], ['total', 'crypto', 'stock']):
         ax.plot(ts['dates'], ts[tseries])
-        ax.tick_params(axis=u'both', which=u'both',length=0)
+        ax.tick_params(axis=u'y', which=u'both',length=0, labelsize=6)
+        #ax.tick_params(axis=u'x', which=u'both')
         ax.text(ts['dates'][0], np.mean(ts[tseries]), int(ts[tseries][-1]), fontsize=7)
         ax.text(ts['dates'][-4], np.mean(ts[tseries]), int(ts[tseries][-1]), fontsize=7)
         ax.text(ts['dates'][0], min(ts[tseries]), title, fontsize=14)
 
     ticks = ax1.get_xticks()
     ax1.set_xticks([ticks[0], ticks[-1]])
-    plt.savefig('plot.png', dpi=dpi)
+    if as_pillow:
+        fig.canvas.draw()
+        return PIL.Image.frombytes('RGB', fig.canvas.get_width_height(), fig.canvas.tostring_rgb()).convert('1')
+    else:
+        plt.savefig('plot.png', dpi=dpi)
     
 
 def financial_text(portfolio, index):

@@ -1,3 +1,4 @@
+prettytable
 pandas
 numpy
 yfinance
