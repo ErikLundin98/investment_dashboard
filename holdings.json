@@ -1,0 +1,19 @@
+{
+    "stocks":
+    {
+        "AMD" : {"amount": 28, "currency": "USD"},
+        "AAPL" : {"amount": 2, "currency": "USD"},
+        "INVE-B.ST" : {"amount": 23, "currency": "SEK"},
+        "NWARF" : {"amount": 445, "currency": "USD"},
+        "NVDA" : {"amount": 15, "currency": "USD"},
+        "PLTR" : {"amount": 19, "currency": "USD"},
+        "SAS.ST" : {"amount": 1852, "currency": "SEK"},
+        "VOLV-B.ST" : {"amount": 30, "currency": "SEK"}
+    },
+    "cryptocurrencies":
+    {
+        "BTC-USD" : 0.03181302,
+        "ETH-USD" : 0.10938,
+        "DOGE-USD" : 1365.4
+    }
+}
