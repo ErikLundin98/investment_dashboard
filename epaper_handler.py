@@ -2,6 +2,7 @@ import infographics
 import financial_data
 import sys
 import os
+import sched
 
 picdir = os.path.join('..', 'pic')
 libdir = os.path.join('..', 'lib')
@@ -12,7 +13,7 @@ import logging
 from waveshare_epd import epd7in5_V2
 from PIL import Image, ImageDraw, ImageFont
 import time
-
+import datetime
 def refresh_data():
     portfolios = index = ipos = coins = None
     try:
@@ -25,7 +26,7 @@ def refresh_data():
     except:
         print('error while fetching IPO:s')
     try:
-        coins = financial_data.get_coins()
+        coins = financial_data.get_coins(5)
     except:
         print('error while fetching crypto data')
     
@@ -48,7 +49,13 @@ def refresh_display(portfolio, index, ipos, coins):
         
         table_font = ImageFont.truetype(os.path.join(picdir, 'Roboto-Black.ttf'), 18)
         
-        draw.text((0,0), t_portfolio.get_string(), font=table_font)
+        draw.multiline_text((0,0), t_portfolio.get_string(), font=table_font)
+        draw.multiline_text((0,140), t_index.get_string(), font=table_font)
+        draw.multiline_text((160,140), t_vix, font=table_font)
+        draw.multiline_text((0,260), t_coins.get_string(), font=table_font)
+        #draw.multiline_text((180,200), t_ipos.get_string(), font=table_font)
+        draw.text((400, 0), f'last update:{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}', font=table_font)
+        print(t_portfolio.get_string())
         epd.display(epd.getbuffer(image))
         print('successful plot of image')
     except IOError as e:
@@ -59,8 +66,11 @@ def refresh_display(portfolio, index, ipos, coins):
     epd.sleep()
 
 
-
-
-if __name__ == '__main__':
+def update():
     portfolio, index, ipos, coins = refresh_data()
     refresh_display(portfolio, index, ipos, coins)
+
+if __name__ == '__main__':
+    while True:
+        update()
+        time.sleep(60*15)
